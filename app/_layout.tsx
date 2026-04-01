@@ -11,6 +11,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { initDatabase } from "@/services/database";
 import "@/global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -23,7 +24,7 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (loaded) SplashScreen.hideAsync();
+    if (loaded) initDatabase().then(() => SplashScreen.hideAsync());
   }, [loaded]);
 
   if (!loaded) return null;
@@ -32,6 +33,7 @@ export default function RootLayout() {
     <GluestackUIProvider mode="dark">
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="import" options={{ presentation: "modal", headerShown: false }} />
       </Stack>
     </GluestackUIProvider>
   );

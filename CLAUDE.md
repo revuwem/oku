@@ -230,6 +230,7 @@ For implementation patterns, check ADR in @/docs
 - Only use `StyleSheet.create()` for truly dynamic values that Tailwind can't express
 - Never hardcode colors — use semantic theme classes (`text-typography-0`, `bg-background-0`, etc.)
 - All UI icons come from `lucide-react-native`
+- When a gluestack-ui primitive is needed and not yet in `components/ui/`, install it with `npm run add [component-name]` (maps to `npx gluestack-ui add`). Never hand-roll a component that gluestack already provides
 - Reusable components must not own consumer-specific configuration — pass it in via props or standard framework options (e.g. React Navigation's `tabBarIcon`) so the component stays generic and the caller owns its own data
 
 ## What NOT to build in V1

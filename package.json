@@ -12,6 +12,8 @@
     "add": "npx gluestack-ui add"
   },
   "dependencies": {
+    "@expo-google-fonts/noto-serif-jp": "^0.4.3",
+    "@expo-google-fonts/source-serif-4": "^0.4.1",
     "@expo/html-elements": "^0.10.1",
     "@expo/vector-icons": "^15.0.3",
     "@gluestack-ui/core": "^3.0.16",

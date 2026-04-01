@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
+import {
+  NotoSerifJP_400Regular,
+} from "@expo-google-fonts/noto-serif-jp";
+import {
+  SourceSerif4_400Regular,
+  SourceSerif4_400Regular_Italic,
+} from "@expo-google-fonts/source-serif-4";
 import * as SplashScreen from "expo-splash-screen";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
@@ -10,9 +17,9 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    SourceSerif4: require("../assets/fonts/SourceSerif4-Regular.ttf"),
-    "SourceSerif4-Italic": require("../assets/fonts/SourceSerif4-Italic.ttf"),
-    NotoSerifJP: require("../assets/fonts/NotoSerifJP-Regular.ttf"),
+    NotoSerifJP: NotoSerifJP_400Regular,
+    SourceSerif4: SourceSerif4_400Regular,
+    "SourceSerif4-Italic": SourceSerif4_400Regular_Italic,
   });
 
   useEffect(() => {

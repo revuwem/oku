@@ -2,11 +2,9 @@ import { Tabs } from "expo-router";
 import { BookOpen, CirclePlay, House, Settings } from "lucide-react-native";
 
 import { TabBar } from "@/components/tab-bar";
-import { LibraryProvider } from "@/store/library-store";
 
 export default function TabLayout() {
   return (
-    <LibraryProvider>
     <Tabs
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <TabBar {...props} />}
@@ -44,6 +42,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-    </LibraryProvider>
   );
 }

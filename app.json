@@ -5,13 +5,14 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "oku",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.oku.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -27,16 +28,7 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/fonts/SourceSerif4-Regular.ttf",
-            "./assets/fonts/SourceSerif4-Italic.ttf",
-            "./assets/fonts/NotoSerifJP-Regular.ttf"
-          ]
-        }
-      ],
+      "expo-font",
       [
         "expo-splash-screen",
         {
@@ -48,11 +40,19 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "fc8fee55-ee06-46a2-9d54-3cf2041c259f"
+      }
+    },
+    "owner": "revuwem"
   }
 }

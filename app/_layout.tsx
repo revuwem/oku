@@ -12,6 +12,7 @@ import * as SplashScreen from "expo-splash-screen";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { initDatabase } from "@/services/database";
+import { LibraryProvider } from "@/store/library-store";
 import "@/global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -31,10 +32,12 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider mode="dark">
+      <LibraryProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="import" options={{ presentation: "modal", headerShown: false }} />
       </Stack>
+      </LibraryProvider>
     </GluestackUIProvider>
   );
 }

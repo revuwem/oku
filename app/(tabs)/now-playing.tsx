@@ -1,10 +1,10 @@
 import { ScreenLayout } from "@/components/screen-layout";
-import { Text } from "@/components/ui/text";
+import { CirclePlay } from "lucide-react-native";
 
 export default function NowPlayingScreen() {
   return (
     <ScreenLayout>
-      <Text>Now playing</Text>
+      <CirclePlay color="orange" />
     </ScreenLayout>
   );
 }

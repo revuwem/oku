@@ -11,43 +11,38 @@ Read `docs/product-spec.md` for the full V1 feature specification.
 - **Framework**: React Native (TypeScript)
 - **Audio**: `react-native-track-player` for playback, background audio, and lock screen controls
 - **File handling**: `react-native-zip-archive` for ZIP, native module for RAR extraction
-- **Storage**: SQLite (`expo-sqlite` or `WatermelonDB`) for library data; `react-native-mmkv` for preferences
+- **Storage**: SQLite (`expo-sqlite`) for library data
 - **UI Components**: `gluestack-ui` — copy-paste component library built on NativeWind. Components are local in `@/components/ui/`. Use gluestack primitives (`Box`, `Text`, `HStack`, `VStack`, `Pressable`, `Button`, etc.) instead of raw React Native imports
 - **Styling**: TailwindCSS via `nativewind` — gluestack-ui uses NativeWind under the hood. All custom styling via Tailwind utility classes on `className`
-- **Font**: Source Serif 4 (serif, medium weight, 400–600)
-- **Icons**: `@tabler/icons-react-native` for all UI icons (navigation, controls, system). The only custom SVG icon is the PagePulseIcon (app branded logo)
+- **Font**: Source Serif 4 (serif, regular, italic, 400) for body, Noto Sans JP (serif, regular, 400) for heading
+- **Icons**: `lucide-react-native` for all UI icons (navigation, controls, system). The only custom SVG icon is the PagePulseIcon (app branded logo)
 
 ## Project structure
 
 ```
-src/
-├── components/
-│   ├── ui/               # gluestack-ui components (copy-pasted, customized)
-│   │   ├── box/
-│   │   ├── text/
-│   │   ├── heading/
-│   │   ├── button/
-│   │   ├── hstack/
-│   │   ├── vstack/
-│   │   ├── pressable/
-│   │   ├── progress/
-│   │   ├── slider/
-│   │   ├── actionsheet/
-│   │   ├── divider/
-│   │   └── gluestack-ui-provider/
-│   ├── PagePulseIcon.tsx    # App branded icon (only custom SVG)
-│   ├── CoverPlaceholder.tsx # Book cover with PagePulseIcon inside
-│   ├── TabBar.tsx
-│   └── SleepBookmarkBanner.tsx
-├── screens/          # App screens
-│   ├── LibraryScreen.tsx
-│   ├── NowPlayingScreen.tsx
-│   ├── SleepModeScreen.tsx
-│   ├── ChapterListScreen.tsx
-│   ├── TimerSettingsScreen.tsx
-│   └── ImportScreen.tsx
-├── theme/            # Design system
-│   └── tokens.ts     # Colors, typography, spacing, radius, sizes
+components/
+  ├── ui/               # gluestack-ui components (copy-pasted, customized)
+  │   ├── box/
+  │   ├── text/
+  │   ├── heading/
+  │   ├── button/
+  │   ├── hstack/
+  │   ├── vstack/
+  │   ├── pressable/
+  │   ├── progress/
+  │   ├── slider/
+  │   ├── actionsheet/
+  │   ├── divider/
+  │   └── gluestack-ui-provider/
+  ├── PagePulseIcon.tsx    # App branded icon (only custom SVG)
+  ├── CoverPlaceholder.tsx # Book cover with PagePulseIcon inside
+  ├── TabBar.tsx
+  └── SleepBookmarkBanner.tsx
+├── app/          # App screens
+│   ├── _layout.tsx
+│   ├── (tabs).tsx
+|   |    ├── _layout.tsx
+|   |    └── index.tsx
 ├── services/         # Business logic
 │   ├── audioPlayer.ts
 │   ├── sleepTimer.ts
@@ -147,92 +142,21 @@ export default function App() {
 }
 ```
 
-### Gluestack component mapping for Oku
-
-| Oku UI element | gluestack component | Notes |
-|----------------|---------------------|-------|
-| Screen wrapper | `Box` | `className="flex-1 bg-midnight"` |
-| Card | `Box` | `className="bg-charcoal rounded-card p-4"` |
-| Horizontal layout | `HStack` | Use `space` prop for gaps |
-| Vertical layout | `VStack` | Use `space` prop for gaps |
-| Screen title | `Heading` | `size="2xl" className="text-parchment font-serif"` |
-| Body text | `Text` | `size="sm" className="text-stone font-serif"` |
-| Primary button | `Button` + `ButtonText` | `className="bg-amber rounded-button"` |
-| Ghost button | `Button` variant="link" + `ButtonText` | `className="text-amber"` |
-| Pressable area | `Pressable` | Book cards, chapter rows |
-| Progress bar | `Progress` + `ProgressFilledTrack` | `className="bg-ash/25"` track, `className="bg-amber"` fill |
-| Timer input slider | `Slider` compound | Custom track/thumb with amber accent |
-| Modal / bottom sheet | `Actionsheet` | Timer settings, chapter list |
-| Divider | `Divider` | `className="bg-ash/15"` |
-
-### Tailwind theme configuration
-
-Configure custom theme in `tailwind.config.js`:
-
-```javascript
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        midnight: '#1A1714',
-        charcoal: '#2A2520',
-        ash: '#5C554A',
-        stone: '#7A7168',
-        amber: '#D4A574',
-        parchment: '#E8DFD3',
-        cream: '#FAF8F5',
-        walnut: '#A67C42',
-        espresso: '#946830',
-        'deep-amber': '#3D2E1E',
-      },
-      fontFamily: {
-        serif: ['SourceSerif4'],
-        'serif-italic': ['SourceSerif4-Italic'],
-        brand: ['NotoSerifJP'],
-      },
-      borderRadius: {
-        'card': '16px',
-        'button': '12px',
-        'cover-sm': '10px',
-        'cover-lg': '20px',
-      },
-    },
-  },
-};
-```
-
 ### Colors
-Colors are defined in `tailwind.config.js` as custom theme values. Use Tailwind classes:
-- `bg-midnight` — app background
-- `bg-charcoal` — cards, surfaces, tab bar
-- `text-parchment` — primary text
-- `text-stone` — secondary text
-- `text-ash` — tertiary text, hints
-- `text-amber` / `bg-amber` — accent, CTAs, active states
-- `bg-deep-amber` — sleep bookmark banner
+
+Colors are defined in `gluestack.config.ts` as custom theme values. Use semantic classes:
+
+- `bg-primary-50` — app background
+- `bg-primary-100` — cards, surfaces, tab bar
+- `text-typography-0` — primary text
+- `text-typography-100` — secondary text
+- `text-typography-200` — tertiary text, hints
+- `text-primary-500` / `bg-primary-200` — accent, CTAs, active states
 
 For opacity variants, use Tailwind's opacity modifier: `bg-ash/25`, `text-amber/80`.
 
-### Dark mode palette (primary)
-| Tailwind class | Hex | Usage |
-|-------|-----|-------|
-| midnight | #1A1714 | App background |
-| charcoal | #2A2520 | Cards, surfaces, tab bar |
-| ash | #5C554A | Tertiary text, dividers, inactive icons |
-| stone | #7A7168 | Secondary text |
-| amber | #D4A574 | Accent, progress, CTAs |
-| parchment | #E8DFD3 | Primary text, headings |
-
-### Typography
-- All text uses Source Serif 4 via `font-serif` class
-- Weights: `font-normal` (400), `font-medium` (500), `font-semibold` (600), `font-bold` (700)
-- Never use Inter, system font, or sans-serif fonts in UI
-- Screen titles: `text-[22px] font-semibold`
-- Card titles: `text-base font-semibold` (16px)
-- Body: `text-[13px]` to `text-[15px] font-normal`
-- Labels/hints: `text-[11px]` to `text-xs font-normal`
-
 ### Spacing
+
 - Screen horizontal padding: `px-6` (24px)
 - Card padding: `p-4` (16px)
 - Gap between cards: `gap-3` (12px)
@@ -240,48 +164,33 @@ For opacity variants, use Tailwind's opacity modifier: `bg-ash/25`, `text-amber/
 
 ### Icons
 
-**Tabler Icons** (`@tabler/icons-react-native`) are used for ALL UI icons. Never create custom SVGs for standard UI elements.
+**Lucide Icons** (`lucide-react-native`) are used for ALL UI icons. Never create custom SVGs for standard UI elements.
 
 ```typescript
-import { IconBook, IconPlayerPlay, IconSettings, IconMoon } from '@tabler/icons-react-native';
+import { CirclePlus, House, Settings, CirclePlay } from 'lucide-react-native';
 
 // Standard usage
-<IconBook size={20} color={colors.stone} stroke={1.8} />
+<IconBook />
 
 // Active state
-<IconBook size={20} color={colors.amber} stroke={1.8} />
+<IconBook />
 ```
 
 Key rules:
+
 - Default size: 20px for navigation and inline icons
 - Stroke width: always `1.8` (medium weight — matches brand feel)
 - Always paired with text labels in navigation
 - Color follows state: amber for active, ash/stone for inactive
 
-Commonly used Tabler icons in Oku:
-| Context | Icon | Tabler name |
-|---------|------|-------------|
-| Library tab | Book | `IconBook` |
-| Now Playing tab | Play circle | `IconPlayerPlay` |
-| Settings tab | Settings gear | `IconSettings` |
-| Back navigation | Chevron left | `IconChevronLeft` |
-| Skip back 30s | Rewind | `IconRewindBackward30` or `IconPlayerSkipBack` |
-| Skip forward 30s | Fast forward | `IconRewindForward30` or `IconPlayerSkipForward` |
-| Play button | Play | `IconPlayerPlayFilled` |
-| Pause button | Pause | `IconPlayerPauseFilled` |
-| Sleep timer / moon | Moon | `IconMoon` |
-| Import | Download | `IconDownload` |
-| Archive file | Archive | `IconArchive` |
-| Close / dismiss | X | `IconX` |
-| Exit sleep mode | Sun | `IconSun` |
-| Chapters expand | Chevron down | `IconChevronDown` |
+**The only custom icon is PagePulseIcon** — the branded app logo (7 vertical bars). This is a hand-built SVG component, NOT from Lucide. Use it exclusively for:
 
-**The only custom icon is PagePulseIcon** — the branded app logo (7 vertical bars). This is a hand-built SVG component, NOT from Tabler. Use it exclusively for:
 - Cover art placeholder when no embedded cover exists
 - Splash screen element
 - Empty state indicator
 
 ### Border radius
+
 - Cards: `rounded-card` (16px) or `rounded-2xl`
 - Buttons: `rounded-button` (12px) or `rounded-xl`
 - Cover (small): `rounded-cover-sm` (10px)
@@ -289,7 +198,9 @@ Commonly used Tabler icons in Oku:
 - Pills/badges: `rounded-full`
 
 ### The Page Pulse icon
+
 The app icon (7 vertical bars) is a reusable component. Use it as:
+
 - Cover art placeholder when no embedded cover exists
 - Splash screen element
 - Empty state indicator
@@ -299,33 +210,15 @@ Bar ratios defined in `tokens.ts` under `pagePulse`.
 
 ## Key implementation patterns
 
-### Sleep timer
-- Timer preference persists in MMKV storage
-- Timer starts automatically with playback — no user action needed
-- Default: 30 min duration, 10 min volume fade
-- Volume fade is linear, applied at the track player level (not system volume)
-- When timer ends: save sleep bookmark at fade start timestamp, pause playback
+For implementation patterns, check ADR in @/docs
 
-### Double-tap to extend
-- Use a custom `useDoubleTap` hook with 300ms threshold
-- On double-tap during sleep mode: reset timer to full duration, volume to 100%
-- Must work on lock screen — handled via notification actions
+## Git
 
-### Sleep bookmark
-- Stored in SQLite with chapter, timestamp, and date
-- Displayed as a banner at top of Now Playing screen
-- Only most recent bookmark shown; older ones in chapter list
-- Banner has: moon icon, "Fell asleep here" text, "Jump back" button
-
-### Archive import
-- Priority: ZIP and RAR archives
-- Extract → scan for M4B/MP3/M4A → group as book → read metadata
-- M4B chapters from embedded markers
-- MP3/M4A: one file = one chapter, sorted alphabetically
-- Cover art: embedded tags first, then Page Pulse icon placeholder
+- Use [Conventional Commits](https://www.conventionalcommits.org/) format for all commit messages: `type(scope): description` — e.g. `feat(tab-bar): add haptic feedback on press`, `fix(player): resume after interruption`, `refactor(tab-bar): move icon config to layout`
 
 ## Code style
 
+- Component files use kebab-case folders with `index.tsx` entry points (e.g. `components/tab-bar/index.tsx`, `components/screen-layout/index.tsx`) — not PascalCase flat files
 - TypeScript strict mode
 - Functional components with hooks
 - Avoid `any` types — define interfaces in `types/index.ts`
@@ -335,10 +228,9 @@ Bar ratios defined in `tokens.ts` under `pagePulse`.
 - Use gluestack component props (`size`, `variant`, `space`) first, `className` for custom overrides
 - Use Tailwind classes via `className` for custom styling beyond what component props offer
 - Only use `StyleSheet.create()` for truly dynamic values that Tailwind can't express
-- Never hardcode colors — use Tailwind theme classes (`text-amber`, `bg-charcoal`, etc.)
-- All UI icons come from `@tabler/icons-react-native` with `stroke={1.8}`
-- The only custom SVG is `PagePulseIcon` — the branded app logo
-- Wrap the root app in `<GluestackUIProvider mode="dark">`
+- Never hardcode colors — use semantic theme classes (`text-typography-0`, `bg-background-0`, etc.)
+- All UI icons come from `lucide-react-native`
+- Reusable components must not own consumer-specific configuration — pass it in via props or standard framework options (e.g. React Navigation's `tabBarIcon`) so the component stays generic and the caller owns its own data
 
 ## What NOT to build in V1
 
@@ -357,5 +249,3 @@ Bar ratios defined in `tokens.ts` under `pagePulse`.
 ## Reference files
 
 - `docs/product-spec.md` — Full product specification
-- `theme/tokens.ts` — Design tokens (colors, typography, spacing, sizes)
-- Figma wireframes: https://www.figma.com/design/boQsb2hbHtfkZgCg4BuDye (v1), https://www.figma.com/design/yL3A9NzoOJZJEoJvzNnbsY (v2)

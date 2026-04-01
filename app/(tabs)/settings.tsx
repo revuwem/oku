@@ -1,9 +1,9 @@
 import { ScreenLayout } from "@/components/screen-layout";
 
-export default function HomeScreen() {
+export default function SettingsScreen() {
   return (
     <ScreenLayout>
-      <ScreenLayout.Heading>Home</ScreenLayout.Heading>
+      <ScreenLayout.Heading>Settings</ScreenLayout.Heading>
     </ScreenLayout>
   );
 }

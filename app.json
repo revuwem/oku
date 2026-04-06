@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.revuwem.oku",
+      "buildNumber": "0.0.1",
+      "supportsTablet": false,
+      "deploymentTarget": "15.5"
     },
     "android": {
       "package": "com.oku.app",
@@ -41,7 +44,15 @@
           }
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "15.5"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

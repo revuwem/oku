@@ -1,0 +1,71 @@
+import Svg, { Rect } from "react-native-svg";
+
+export function Oku() {
+  return (
+    <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <Rect
+        width={26}
+        height={114}
+        x={75}
+        y={199}
+        fill="#d4a574"
+        opacity={0.35}
+        rx={13}
+      />
+      <Rect
+        width={26}
+        height={206}
+        x={131}
+        y={153}
+        fill="#d4a574"
+        opacity={0.45}
+        rx={13}
+      />
+      <Rect
+        width={26}
+        height={298}
+        x={187}
+        y={107}
+        fill="#d4a574"
+        opacity={0.6}
+        rx={13}
+      />
+      <Rect
+        width={26}
+        height={368}
+        x={243}
+        y={72}
+        fill="#d4a574"
+        opacity={0.85}
+        rx={13}
+      />
+      <Rect
+        width={26}
+        height={298}
+        x={299}
+        y={107}
+        fill="#d4a574"
+        opacity={0.6}
+        rx={13}
+      />
+      <Rect
+        width={26}
+        height={206}
+        x={355}
+        y={153}
+        fill="#d4a574"
+        opacity={0.45}
+        rx={13}
+      />
+      <Rect
+        width={26}
+        height={114}
+        x={411}
+        y={199}
+        fill="#d4a574"
+        opacity={0.35}
+        rx={13}
+      />
+    </Svg>
+  );
+}

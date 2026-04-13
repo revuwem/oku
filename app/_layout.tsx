@@ -12,6 +12,7 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
 import { initDatabase } from "@/services/database";
 import { LibraryProvider } from "@/store/library-store";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,10 +32,12 @@ export default function RootLayout() {
   return (
     <GluestackUIProvider mode="dark">
       <LibraryProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="import" options={{ presentation: "modal" }} />
-        </Stack>
+        <GestureHandlerRootView>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="import" options={{ presentation: "modal" }} />
+          </Stack>
+        </GestureHandlerRootView>
       </LibraryProvider>
     </GluestackUIProvider>
   );

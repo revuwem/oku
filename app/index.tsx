@@ -21,7 +21,7 @@ export default function IndexScreen() {
         >
           <ButtonIcon as={Library} />
         </Button>
-        <Box className="mb-10 w-48 overflow-hidden items-center">
+        <Box className="w-48 overflow-hidden items-center">
           <Heading isTruncated>Project Hail Mary</Heading>
           <Text>Andy Weir</Text>
         </Box>
@@ -35,7 +35,7 @@ export default function IndexScreen() {
         </Button>
       </Box>
 
-      <Box className="py-6">
+      <Box className="py-3">
         <Player />
       </Box>
     </ScreenLayout>

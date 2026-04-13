@@ -1,16 +1,16 @@
 import { Image } from "expo-image";
-import { BookOpen } from "lucide-react-native";
 
+import { Oku } from "@/components/icons/oku";
 import { Box } from "@/components/ui/box";
 import { tva, VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 
 const coverStyle = tva({
-  base: "bg-background-200 items-center justify-center",
+  base: "bg-background-300 shadow-xs items-center justify-center",
   parentVariants: {
     size: {
       md: "w-20 h-20 rounded-sm",
       lg: "w-64 h-64 rounded-lg",
-      xl: "w-72 h-72 rounded-3xl",
+      xl: "w-96 h-96 rounded-3xl",
     },
   },
 });
@@ -32,7 +32,9 @@ export function Cover({ coverPath, size = "md" }: Props) {
 
   return (
     <Box className={coverStyle({ size })}>
-      <BookOpen size={28} strokeWidth={1.8} color="rgb(138 128 118)" />
+      <Box className="w-32 h-32">
+        <Oku />
+      </Box>
     </Box>
   );
 }

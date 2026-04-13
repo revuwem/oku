@@ -10,7 +10,7 @@ type Props = {
 
 export function ScreenLayout({ children }: Props) {
   return (
-    <Box className="h-full bg-background-50 pt-[10vh] px-5">{children}</Box>
+    <Box className="h-full bg-background-50 pt-[7vh] px-5">{children}</Box>
   );
 }
 

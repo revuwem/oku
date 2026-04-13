@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { FlatList } from "react-native";
 import { router } from "expo-router";
 import { CirclePlus, BookOpen } from "lucide-react-native";
@@ -9,14 +9,24 @@ import { Text } from "@/components/ui/text";
 import { ScreenLayout } from "@/components/screen-layout";
 import { BookCard } from "@/components/book-card";
 import { useLibraryStore } from "@/store/library-store";
+import { usePlayerStore } from "@/store/player-store";
 import type { BookRecord } from "@/types";
 
 export default function LibraryScreen() {
   const { books, loadBooks } = useLibraryStore();
+  const { openBook } = usePlayerStore();
 
   useEffect(() => {
     loadBooks();
   }, [loadBooks]);
+
+  const handleBookPress = useCallback(
+    async (book: BookRecord) => {
+      await openBook(book);
+      router.navigate("/");
+    },
+    [openBook]
+  );
 
   return (
     <ScreenLayout>
@@ -39,7 +49,9 @@ export default function LibraryScreen() {
         <FlatList
           data={books}
           keyExtractor={(item: BookRecord) => item.id}
-          renderItem={({ item }) => <BookCard book={item} onPress={() => {}} />}
+          renderItem={({ item }) => (
+            <BookCard book={item} onPress={() => handleBookPress(item)} />
+          )}
           contentContainerStyle={{ gap: 12, paddingBottom: 24 }}
           showsVerticalScrollIndicator={false}
         />

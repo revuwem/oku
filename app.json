@@ -12,7 +12,10 @@
       "bundleIdentifier": "com.revuwem.oku",
       "buildNumber": "0.0.1",
       "supportsTablet": false,
-      "deploymentTarget": "15.5"
+      "deploymentTarget": "15.5",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
       "package": "com.oku.app",

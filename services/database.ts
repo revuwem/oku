@@ -29,6 +29,13 @@ export async function initDatabase(): Promise<void> {
       file_path TEXT NOT NULL,
       FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
     );
+
+    CREATE TABLE IF NOT EXISTS positions (
+      book_id TEXT PRIMARY KEY,
+      chapter_id TEXT NOT NULL,
+      position_seconds REAL NOT NULL,
+      FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+    );
   `);
 }
 
@@ -95,6 +102,34 @@ export async function getAllBooks(): Promise<BookRecord[]> {
 export async function deleteBook(bookId: string): Promise<void> {
   const database = getDb();
   await database.runAsync("DELETE FROM books WHERE id = ?;", [bookId]);
+}
+
+export async function savePosition(
+  bookId: string,
+  chapterId: string,
+  positionSeconds: number
+): Promise<void> {
+  const database = getDb();
+  await database.runAsync(
+    `INSERT INTO positions (book_id, chapter_id, position_seconds)
+     VALUES (?, ?, ?)
+     ON CONFLICT(book_id) DO UPDATE SET chapter_id = excluded.chapter_id, position_seconds = excluded.position_seconds;`,
+    [bookId, chapterId, positionSeconds]
+  );
+}
+
+export async function loadPosition(
+  bookId: string
+): Promise<{ chapterId: string; positionSeconds: number } | null> {
+  const database = getDb();
+  const row = await database.getFirstAsync<{
+    chapter_id: string;
+    position_seconds: number;
+  }>("SELECT chapter_id, position_seconds FROM positions WHERE book_id = ?;", [
+    bookId,
+  ]);
+  if (!row) return null;
+  return { chapterId: row.chapter_id, positionSeconds: row.position_seconds };
 }
 
 export async function getChaptersByBook(bookId: string): Promise<ChapterRecord[]> {

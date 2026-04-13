@@ -17,7 +17,7 @@ export function BookCard({ book, onPress }: BookCardProps) {
         space="md"
         className="bg-background-100 rounded-2xl p-4 items-center"
       >
-        <Cover coverPath={book.coverPath} />
+        <Cover coverPath={book.coverPath} size="md" />
         <VStack space="xs" className="flex-1">
           <Text
             size="md"

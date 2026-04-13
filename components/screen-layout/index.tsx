@@ -1,5 +1,8 @@
 import { Box } from "@/components/ui/box";
+import { Button, ButtonIcon } from "@/components/ui/button";
 import { Heading as GSHeading } from "@/components/ui/heading";
+import { useRouter } from "expo-router";
+import { ChevronLeft } from "lucide-react-native";
 
 type Props = {
   children: React.ReactNode;
@@ -12,10 +15,22 @@ export function ScreenLayout({ children }: Props) {
 }
 
 function Heading({ children }: React.PropsWithChildren) {
+  const router = useRouter();
   return (
-    <GSHeading size="2xl" bold>
-      {children}
-    </GSHeading>
+    <Box className="flex-row items-center gap-4">
+      <Button
+        onPress={() => router.back()}
+        aria-label="Go back"
+        variant="link"
+        action="secondary"
+        size="xl"
+      >
+        <ButtonIcon as={ChevronLeft} />
+      </Button>
+      <GSHeading size="2xl" bold>
+        {children}
+      </GSHeading>
+    </Box>
   );
 }
 

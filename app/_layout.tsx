@@ -1,19 +1,17 @@
-import { useEffect } from "react";
-import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
-import {
-  NotoSerifJP_400Regular,
-} from "@expo-google-fonts/noto-serif-jp";
+import { NotoSerifJP_400Regular } from "@expo-google-fonts/noto-serif-jp";
 import {
   SourceSerif4_400Regular,
   SourceSerif4_400Regular_Italic,
 } from "@expo-google-fonts/source-serif-4";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import "@/global.css";
 import { initDatabase } from "@/services/database";
 import { LibraryProvider } from "@/store/library-store";
-import "@/global.css";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,10 +31,10 @@ export default function RootLayout() {
   return (
     <GluestackUIProvider mode="dark">
       <LibraryProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="import" options={{ presentation: "modal", headerShown: false }} />
-      </Stack>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="import" options={{ presentation: "modal" }} />
+        </Stack>
       </LibraryProvider>
     </GluestackUIProvider>
   );

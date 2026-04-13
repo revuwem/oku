@@ -40,7 +40,7 @@ export const textStyle = tva({
       true: "italic",
     },
     highlight: {
-      true: "bg-yellow-500",
+      true: "text-primary-500",
     },
   },
 });

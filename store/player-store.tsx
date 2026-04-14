@@ -29,6 +29,7 @@ type PlayerStore = {
   isPlaying: boolean;
   activeTrackTitle: string | undefined;
   openBook: (book: BookRecord) => Promise<void>;
+  closeBook: () => Promise<void>;
   play: () => Promise<void>;
   pause: () => Promise<void>;
   seekTo: (position: number) => Promise<void>;
@@ -91,6 +92,12 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
     await TrackPlayer.play();
   }, []);
 
+  const closeBook = useCallback(async () => {
+    await TrackPlayer.reset();
+    setCurrentBook(null);
+    setChapters([]);
+  }, []);
+
   const play = useCallback(() => TrackPlayer.play(), []);
   const pause = useCallback(() => TrackPlayer.pause(), []);
   const seekTo = useCallback(
@@ -116,6 +123,7 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
         isPlaying,
         activeTrackTitle: activeTrack?.title,
         openBook,
+        closeBook,
         play,
         pause,
         seekTo,

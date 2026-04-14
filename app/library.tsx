@@ -1,5 +1,6 @@
-import { useEffect, useCallback } from "react";
-import { FlatList } from "react-native";
+import { useEffect, useCallback, useState, useRef } from "react";
+import { Alert, FlatList } from "react-native";
+import type { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 import { router } from "expo-router";
 import { CirclePlus, BookOpen } from "lucide-react-native";
 
@@ -13,8 +14,17 @@ import { usePlayerStore } from "@/store/player-store";
 import type { BookRecord } from "@/types";
 
 export default function LibraryScreen() {
-  const { books, loadBooks } = useLibraryStore();
-  const { openBook } = usePlayerStore();
+  const { books, loadBooks, removeBook } = useLibraryStore();
+  const { openBook, closeBook, currentBook } = usePlayerStore();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const openSwipeableRef = useRef<SwipeableMethods | null>(null);
+
+  const handleSwipeOpen = useCallback((methods: SwipeableMethods) => {
+    if (openSwipeableRef.current !== methods) {
+      openSwipeableRef.current?.close();
+    }
+    openSwipeableRef.current = methods;
+  }, []);
 
   useEffect(() => {
     loadBooks();
@@ -26,6 +36,38 @@ export default function LibraryScreen() {
       router.navigate("/");
     },
     [openBook]
+  );
+
+  const handleDelete = useCallback(
+    (book: BookRecord) => {
+      setDeletingId(book.id);
+      Alert.alert(
+        "Remove Book",
+        `Remove "${book.title}" from your library? This cannot be undone.`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: () => setDeletingId(null),
+          },
+          {
+            text: "Remove",
+            style: "destructive",
+            onPress: async () => {
+              try {
+                if (currentBook?.id === book.id) {
+                  await closeBook();
+                }
+                await removeBook(book.id);
+              } finally {
+                setDeletingId(null);
+              }
+            },
+          },
+        ]
+      );
+    },
+    [currentBook, closeBook, removeBook]
   );
 
   return (
@@ -50,7 +92,13 @@ export default function LibraryScreen() {
           data={books}
           keyExtractor={(item: BookRecord) => item.id}
           renderItem={({ item }) => (
-            <BookCard book={item} onPress={() => handleBookPress(item)} />
+            <BookCard
+              book={item}
+              onPress={() => handleBookPress(item)}
+              onDelete={() => handleDelete(item)}
+              onSwipeOpen={handleSwipeOpen}
+              isDeleting={deletingId === item.id}
+            />
           )}
           contentContainerStyle={{ gap: 12, paddingBottom: 24 }}
           showsVerticalScrollIndicator={false}

@@ -24,8 +24,8 @@ export default function IndexScreen() {
           <ButtonIcon as={Library} />
         </Button>
         <Box className="w-48 overflow-hidden items-center">
-          <Heading isTruncated>{currentBook?.title ?? ""}</Heading>
-          <Text>{currentBook?.author ?? ""}</Text>
+          <Heading isTruncated>{currentBook?.title ?? "Unknown title"}</Heading>
+          <Text>{currentBook?.author ?? "Unknown artist"}</Text>
         </Box>
         <Button
           onPress={() => router.push("/settings")}

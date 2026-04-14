@@ -28,6 +28,7 @@ type PlayerStore = {
   duration: number;
   isPlaying: boolean;
   activeTrackTitle: string | undefined;
+  activeChapterIndex: number;
   openBook: (book: BookRecord) => Promise<void>;
   closeBook: () => Promise<void>;
   play: () => Promise<void>;
@@ -48,6 +49,9 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
   const activeTrack = useActiveTrack();
 
   const isPlaying = playbackState.state === State.Playing;
+  const activeChapterIndex = chapters.findIndex(
+    (c) => c.id === activeTrack?.id
+  );
 
   // Keep a ref to the latest position so the save effect doesn't run every second
   const currentBookRef = useRef(currentBook);
@@ -108,10 +112,10 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
     (offset: number) => TrackPlayer.seekBy(offset),
     []
   );
-  const skipToChapter = useCallback(
-    (index: number) => TrackPlayer.skip(index),
-    []
-  );
+  const skipToChapter = useCallback(async (index: number) => {
+    await TrackPlayer.skip(index);
+    await TrackPlayer.play();
+  }, []);
 
   return (
     <PlayerContext.Provider
@@ -122,6 +126,7 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
         duration,
         isPlaying,
         activeTrackTitle: activeTrack?.title,
+        activeChapterIndex,
         openBook,
         closeBook,
         play,

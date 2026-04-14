@@ -50,7 +50,7 @@ export function Controls() {
         <Text className="text-primary-800">{formatTime(displayPosition)}</Text>
         <Text>{formatTime(duration)}</Text>
       </Box>
-      <Box className="flex-row justify-center items-center gap-4 my-8">
+      <Box className="flex-row justify-center items-center gap-4 mt-8">
         <Button
           className="w-24 h-24 rounded-full relative flex-col gap-1"
           variant="link"

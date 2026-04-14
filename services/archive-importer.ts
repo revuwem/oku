@@ -1,7 +1,7 @@
 import * as Crypto from "expo-crypto";
 import * as FileSystem from "expo-file-system/legacy";
 import { unzip, subscribe as subscribeToZipProgress } from "react-native-zip-archive";
-import { parseFile } from "music-metadata";
+import { parseBuffer } from "music-metadata";
 import naturalCompare from "natural-compare";
 import { insertBookWithChapters } from "@/services/database";
 import type {
@@ -52,7 +52,7 @@ export async function importAudiobook(
     onProgress({ stage: "processing" });
     const mp3Files = await scanAndValidate(extractDir);
     const sorted = await sortFiles(mp3Files);
-    const raw = await readRawMetadata(sorted[0]);
+    const raw = await readRawMetadata(sorted);
     const resolved = resolveMetadata(raw, zipFilename);
 
     const { bookDir, coverPath } = await persistFiles(
@@ -191,19 +191,60 @@ async function sortFiles(files: string[]): Promise<string[]> {
 
 // ─── Stage 5: Read raw metadata ───────────────────────────────────────────────
 
-async function readRawMetadata(firstFile: string): Promise<RawMetadata> {
-  try {
-    const metadata = await parseFile(firstFile);
-    const picture = metadata.common.picture?.[0] ?? null;
-    return {
-      title: metadata.common.title,
-      author: metadata.common.artist,
-      coverData: picture ? picture.data : null,
-      coverMime: picture ? picture.format : null,
-    };
-  } catch {
-    return { title: undefined, author: undefined, coverData: null, coverMime: null };
+// ID3 tags live at the start of the file. Reading 1 MB is enough for any
+// embedded cover art; we never need to load the full audio stream.
+const ID3_READ_LIMIT = 1024 * 1024;
+
+async function readRawMetadata(sortedFiles: string[]): Promise<RawMetadata> {
+  // Read title/author from the first file only (album tag = book title).
+  // For cover art, scan up to 5 files in case the first has no embedded art.
+  // Each read is capped at 1 MB so large chapters don't slow things down.
+  let bookTitle: string | undefined;
+  let author: string | undefined;
+  let coverData: Uint8Array | null = null;
+  let coverMime: string | null = null;
+
+  const limit = Math.min(sortedFiles.length, 5);
+
+  for (let i = 0; i < limit; i++) {
+    try {
+      const bytes = await readFileHeader(sortedFiles[i]);
+      const metadata = await parseBuffer(bytes, { mimeType: "audio/mpeg" });
+
+      if (i === 0) {
+        bookTitle = metadata.common.album ?? metadata.common.title;
+        author = metadata.common.artist ?? metadata.common.albumartist;
+      }
+
+      if (!coverData) {
+        const picture = metadata.common.picture?.[0] ?? null;
+        if (picture) {
+          coverData = picture.data;
+          coverMime = picture.format;
+        }
+      }
+
+      if (coverData) break;
+    } catch {
+      // Skip unreadable files — don't abort the whole import.
+    }
   }
+
+  return { title: bookTitle, author, coverData, coverMime };
+}
+
+async function readFileHeader(filePath: string): Promise<Uint8Array> {
+  const base64 = await FileSystem.readAsStringAsync(filePath, {
+    encoding: FileSystem.EncodingType.Base64,
+    position: 0,
+    length: ID3_READ_LIMIT,
+  });
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }
 
 // ─── Stage 6: Resolve metadata ───────────────────────────────────────────────

@@ -33,7 +33,7 @@ export default function LibraryScreen() {
   const handleBookPress = useCallback(
     async (book: BookRecord) => {
       await openBook(book);
-      router.navigate("/");
+      router.back();
     },
     [openBook]
   );

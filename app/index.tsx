@@ -16,7 +16,7 @@ export default function IndexScreen() {
     <ScreenLayout>
       <Box className="flex-row justify-between">
         <Button
-          onPress={() => router.navigate("/library")}
+          onPress={() => router.push("/library")}
           action="secondary"
           variant="link"
           size="xl"
@@ -28,7 +28,7 @@ export default function IndexScreen() {
           <Text>{currentBook?.author ?? ""}</Text>
         </Box>
         <Button
-          onPress={() => router.navigate("/settings")}
+          onPress={() => router.push("/settings")}
           action="secondary"
           variant="link"
           size="xl"

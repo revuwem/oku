@@ -1,3 +1,5 @@
+import { PauseFilledIcon } from "@/components/icons/pause-filled";
+import { PlayFilledIcon } from "@/components/icons/play-filled";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import {
@@ -10,7 +12,7 @@ import { Text } from "@/components/ui/text";
 import { usePlayerStore } from "@/store/player-store";
 import { formatTime } from "@/utils/formatTime";
 import * as Haptics from "expo-haptics";
-import { ChevronsLeft, ChevronsRight, Pause, Play } from "lucide-react-native";
+import { ChevronsLeft, ChevronsRight } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
 
 export function Controls() {
@@ -86,13 +88,17 @@ export function Controls() {
           <ButtonText className="text-sm">30s</ButtonText>
         </Button>
         <Button
-          className="w-24 h-24 rounded-full"
+          className="w-32 h-32 rounded-full"
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             return isPlaying ? pause() : play();
           }}
         >
-          <ButtonIcon as={isPlaying ? Pause : Play} className="w-10 h-10" />
+          {isPlaying ? (
+            <PauseFilledIcon size={52} />
+          ) : (
+            <PlayFilledIcon size={52} />
+          )}
         </Button>
         <Button
           className="w-24 h-24 rounded-full relative flex-col gap-1"

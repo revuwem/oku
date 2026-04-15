@@ -18,6 +18,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
 import { importAudiobook } from "@/services/archive-importer";
 import { useLibraryStore } from "@/store/library-store";
+import { usePlayerStore } from "@/store/player-store";
 import type { ImportError, ImportProgress } from "@/types";
 
 type ScreenState =
@@ -28,6 +29,7 @@ type ScreenState =
 export default function ImportScreen() {
   const [state, setState] = useState<ScreenState>({ status: "idle" });
   const { addBook } = useLibraryStore();
+  const { openBook } = usePlayerStore();
 
   const handlePickFile = async () => {
     const result = await DocumentPicker.getDocumentAsync({
@@ -45,7 +47,9 @@ export default function ImportScreen() {
         setState({ status: "importing", progress });
       });
       addBook(book);
-      router.back();
+      await openBook(book);
+      router.dismissAll();
+      router.navigate("/");
     } catch (err) {
       setState({
         status: "error",

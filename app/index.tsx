@@ -64,6 +64,7 @@ export default function IndexScreen() {
           action="secondary"
           variant="link"
           size="xl"
+          className="w-10"
         >
           <ButtonIcon as={Library} />
         </Button>
@@ -76,6 +77,7 @@ export default function IndexScreen() {
           action="secondary"
           variant="link"
           size="xl"
+          className="w-10"
         >
           <ButtonIcon as={Settings} />
         </Button>

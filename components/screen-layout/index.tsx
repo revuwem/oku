@@ -24,6 +24,7 @@ function Heading({ children }: React.PropsWithChildren) {
         variant="link"
         action="secondary"
         size="xl"
+        className="w-10"
       >
         <ButtonIcon as={ChevronLeft} />
       </Button>

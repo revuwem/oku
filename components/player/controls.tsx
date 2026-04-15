@@ -78,33 +78,40 @@ export function Controls() {
       </Box>
       <Box className="flex-row justify-center items-center gap-4 mt-8">
         <Button
-          className="w-24 h-24 rounded-full relative flex-col gap-1"
+          className="w-24 h-24 rounded-full relative flex-col gap-0"
           variant="link"
           action="secondary"
           size="xl"
-          onPress={() => seekBy(-30)}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            seekBy(-30);
+          }}
         >
           <ButtonIcon as={ChevronsLeft} className="w-10 h-10" />
-          <ButtonText className="text-sm">30s</ButtonText>
+          <ButtonText className="text-xs">30s</ButtonText>
         </Button>
         <Button
-          className="w-32 h-32 rounded-full"
+          className="w-24 h-24 rounded-full"
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             return isPlaying ? pause() : play();
           }}
         >
           {isPlaying ? (
-            <PauseFilledIcon size={52} />
+            <PauseFilledIcon size={40} />
           ) : (
-            <PlayFilledIcon size={52} />
+            <PlayFilledIcon size={40} />
           )}
         </Button>
         <Button
-          className="w-24 h-24 rounded-full relative flex-col gap-1"
+          className="w-24 h-24 rounded-full relative flex-col gap-0"
           variant="link"
+          size="xl"
           action="secondary"
-          onPress={() => seekBy(30)}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            seekBy(30);
+          }}
         >
           <ButtonIcon as={ChevronsRight} className="w-10 h-10" />
           <ButtonText className="text-xs">30s</ButtonText>

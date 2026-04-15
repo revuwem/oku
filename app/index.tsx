@@ -31,15 +31,15 @@ export default function IndexScreen() {
     return (
       <ScreenLayout>
         <Box className="flex-1 items-center justify-center gap-6">
-          <Box className="w-32 h-32">
+          <Box className="w-32 h-32 mb-6">
             <Oku />
           </Box>
           <VStack space="sm" className="items-center">
             <Heading size="2xl" className="text-center w-96 tracking-tight">
-              Your library is empty
+              Every great library begins with a single book
             </Heading>
             <Text className="text-typography-200 text-center px-8">
-              Every great library begins with a single book
+              Your library is empty.
             </Text>
           </VStack>
           <Button

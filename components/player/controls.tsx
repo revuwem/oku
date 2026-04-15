@@ -84,7 +84,10 @@ export function Controls() {
         </Button>
         <Button
           className="w-24 h-24 rounded-full"
-          onPress={isPlaying ? pause : play}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            isPlaying ? pause() : play();
+          }}
         >
           <ButtonIcon as={isPlaying ? Pause : Play} className="w-10 h-10" />
         </Button>

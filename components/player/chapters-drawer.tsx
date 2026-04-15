@@ -1,9 +1,13 @@
 import { Chapters } from "@/components/player/chapters";
 import { Heading } from "@/components/ui/heading";
-import { Text } from "@/components/ui/text";
 import { usePlayerStore } from "@/store/player-store";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
@@ -33,10 +37,8 @@ export function ChaptersDrawer({ isOpen, onClose }: Props) {
       setIsVisible(true);
       translateY.value = withSpring(0, springConfig);
     } else {
-      translateY.value = withSpring(
-        drawerHeight,
-        springConfig,
-        () => runOnJS(setIsVisible)(false)
+      translateY.value = withSpring(drawerHeight, springConfig, () =>
+        runOnJS(setIsVisible)(false),
       );
     }
   }, [isOpen, translateY]);
@@ -69,22 +71,18 @@ export function ChaptersDrawer({ isOpen, onClose }: Props) {
     >
       <Animated.View style={[StyleSheet.absoluteFillObject, styles.overlay]}>
         <Pressable style={StyleSheet.absoluteFillObject} onPress={onClose} />
-        <Animated.View style={[styles.drawer, { height: drawerHeight }, drawerStyle]}>
+        <Animated.View
+          style={[styles.drawer, { height: drawerHeight }, drawerStyle]}
+        >
           <GestureDetector gesture={panGesture}>
             <Animated.View style={styles.handle}>
               <Animated.View style={styles.handleBar} />
             </Animated.View>
           </GestureDetector>
 
-          <Heading size="2xl" bold className="px-6 pt-2 pb-1">
+          <Heading size="2xl" bold className="px-6 pt-2 pb-4 mb-2">
             Chapters
           </Heading>
-          {currentBook && (
-            <Text size="sm" className="text-typography-200 px-6 pb-3">
-              {currentBook.title}
-            </Text>
-          )}
-
           <Chapters />
         </Animated.View>
       </Animated.View>

@@ -1,7 +1,8 @@
 import { Box } from "@/components/ui/box";
+import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
 import { Pressable } from "@/components/ui/pressable";
-import { Text } from "@/components/ui/text";
+import { VStack } from "@/components/ui/vstack";
 import { usePlayerStore } from "@/store/player-store";
 import { ScrollView } from "react-native";
 
@@ -12,42 +13,40 @@ export function Chapters() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      {chapters.map((chapter, i) => {
-        const isActive = i === activeChapterIndex;
-        return (
-          <Pressable
-            key={chapter.id}
-            onPress={() => skipToChapter(chapter.index)}
-          >
-            <HStack
-              space="md"
-              className={`py-4 px-6 items-center border-b border-background-100`}
+      <VStack space="md">
+        {chapters.map((chapter, i) => {
+          const isActive = i === activeChapterIndex;
+          return (
+            <Pressable
+              key={chapter.id}
+              onPress={() => skipToChapter(chapter.index)}
             >
-              <Text
-                size="sm"
-                className={`w-6 text-center ${isActive ? "text-primary-500" : "text-typography-400"}`}
+              <HStack
+                className={`p-4 pl-5 mx-3 rounded-md items-center gap-3 ${isActive ? "bg-background-100" : ""}`}
               >
-                {i + 1}
-              </Text>
-              <Box className="flex-1">
-                <Text
-                  className={`font-medium ${isActive ? "text-primary-500" : "text-typography-0"}`}
-                >
-                  {chapter.title}
-                </Text>
-                {isActive && (
-                  <Box className="h-1 bg-background-300 mt-2 rounded-full overflow-hidden">
-                    <Box
-                      className="h-full bg-primary-500 rounded-full"
-                      style={{ width: `${progress * 100}%`, minWidth: 2 }}
-                    />
-                  </Box>
-                )}
-              </Box>
-            </HStack>
-          </Pressable>
-        );
-      })}
+                <Box className="flex-1">
+                  <Heading
+                    size="sm"
+                    className={
+                      isActive ? "text-primary-500" : "text-typography-0"
+                    }
+                  >
+                    {chapter.title}
+                  </Heading>
+                  {isActive && (
+                    <Box className="h-1.5 bg-background-300 mt-3 rounded-full overflow-hidden">
+                      <Box
+                        className="h-full bg-primary-500 rounded-full"
+                        style={{ width: `${progress * 100}%`, minWidth: 2 }}
+                      />
+                    </Box>
+                  )}
+                </Box>
+              </HStack>
+            </Pressable>
+          );
+        })}
+      </VStack>
     </ScrollView>
   );
 }

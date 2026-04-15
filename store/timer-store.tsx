@@ -19,14 +19,12 @@ export const END_OF_CHAPTER = -1;
 
 export const FADE_PRESETS: { label: string; seconds: number | null }[] = [
   { label: "Not set", seconds: null },
-  { label: "10 sec", seconds: 10 },
   { label: "5 min", seconds: 300 },
   { label: "10 min", seconds: 600 },
   { label: "15 min", seconds: 900 },
 ];
 
 export const TIMER_PRESETS: { label: string; seconds: number | null }[] = [
-  { label: "30 sec", seconds: 30 },
   { label: "15 min", seconds: 900 },
   { label: "30 min", seconds: 1800 },
   { label: "45 min", seconds: 2700 },

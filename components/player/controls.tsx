@@ -24,7 +24,10 @@ export function Controls() {
 
   // Clear seekTarget once the player position has caught up
   useEffect(() => {
-    if (seekTarget.current !== null && Math.abs(position - seekTarget.current) < 1) {
+    if (
+      seekTarget.current !== null &&
+      Math.abs(position - seekTarget.current) < 1
+    ) {
       seekTarget.current = null;
     }
   }, [position]);
@@ -64,7 +67,7 @@ export function Controls() {
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
-          <SliderThumb hitSlop={20} />
+          <SliderThumb hitSlop={40} />
         </Slider>
       </Box>
       <Box className="flex-row justify-between -mt-2">
@@ -86,7 +89,7 @@ export function Controls() {
           className="w-24 h-24 rounded-full"
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            isPlaying ? pause() : play();
+            return isPlaying ? pause() : play();
           }}
         >
           <ButtonIcon as={isPlaying ? Pause : Play} className="w-10 h-10" />

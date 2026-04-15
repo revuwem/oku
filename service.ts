@@ -5,10 +5,10 @@ export async function PlaybackService() {
   TrackPlayer.addEventListener(Event.RemotePause, () => TrackPlayer.pause());
   TrackPlayer.addEventListener(Event.RemoteStop, () => TrackPlayer.stop());
   TrackPlayer.addEventListener(Event.RemoteJumpForward, () =>
-    TrackPlayer.seekBy(30)
+    TrackPlayer.seekBy(15)
   );
   TrackPlayer.addEventListener(Event.RemoteJumpBackward, () =>
-    TrackPlayer.seekBy(-30)
+    TrackPlayer.seekBy(-15)
   );
   TrackPlayer.addEventListener(Event.RemoteSeek, ({ position }) =>
     TrackPlayer.seekTo(position)

@@ -84,11 +84,11 @@ export function Controls() {
           size="xl"
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            seekBy(-30);
+            seekBy(-15);
           }}
         >
           <ButtonIcon as={ChevronsLeft} className="w-10 h-10" />
-          <ButtonText className="text-xs">30s</ButtonText>
+          <ButtonText className="text-xs">15s</ButtonText>
         </Button>
         <Button
           className="w-24 h-24 rounded-full"
@@ -110,11 +110,11 @@ export function Controls() {
           action="secondary"
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            seekBy(30);
+            seekBy(15);
           }}
         >
           <ButtonIcon as={ChevronsRight} className="w-10 h-10" />
-          <ButtonText className="text-xs">30s</ButtonText>
+          <ButtonText className="text-xs">15s</ButtonText>
         </Button>
       </Box>
     </Box>

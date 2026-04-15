@@ -25,7 +25,7 @@ export async function setupPlayer(): Promise<void> {
         Capability.SkipToNext,
       ],
       progressUpdateEventInterval: 1,
-      jumpInterval: 30,
+      jumpInterval: 15,
     });
     isSetUp = true;
   } catch {

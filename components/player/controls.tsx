@@ -56,7 +56,7 @@ export function Controls() {
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
-          <SliderThumb />
+          <SliderThumb hitSlop={20} />
         </Slider>
       </Box>
       <Box className="flex-row justify-between -mt-2">

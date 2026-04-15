@@ -16,6 +16,7 @@ import TrackPlayer, {
 import { loadBook } from "@/services/audio-player";
 import {
   getChaptersByBook,
+  getLastPlayedBookId,
   loadPosition,
   savePosition,
 } from "@/services/database";
@@ -29,7 +30,8 @@ type PlayerStore = {
   isPlaying: boolean;
   activeTrackTitle: string | undefined;
   activeChapterIndex: number;
-  openBook: (book: BookRecord) => Promise<void>;
+  openBook: (book: BookRecord, autoPlay?: boolean) => Promise<void>;
+  resumeLastBook: (books: BookRecord[]) => Promise<void>;
   closeBook: () => Promise<void>;
   play: () => Promise<void>;
   pause: () => Promise<void>;
@@ -74,7 +76,7 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
     savePosition(book.id, chapterId, positionRef.current).catch(() => {});
   }, [playbackState.state]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const openBook = useCallback(async (book: BookRecord) => {
+  const openBook = useCallback(async (book: BookRecord, autoPlay = true) => {
     const bookChapters = await getChaptersByBook(book.id);
     const saved = await loadPosition(book.id);
 
@@ -93,8 +95,16 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
     setChapters(bookChapters);
 
     await loadBook(book, bookChapters, startIndex, startPosition);
-    await TrackPlayer.play();
+    if (autoPlay) await TrackPlayer.play();
   }, []);
+
+  const resumeLastBook = useCallback(async (books: BookRecord[]) => {
+    const lastBookId = await getLastPlayedBookId();
+    if (!lastBookId) return;
+    const book = books.find((b) => b.id === lastBookId);
+    if (!book) return;
+    await openBook(book, false);
+  }, [openBook]);
 
   const closeBook = useCallback(async () => {
     await TrackPlayer.reset();
@@ -128,6 +138,7 @@ export function PlayerProvider({ children }: React.PropsWithChildren) {
         activeTrackTitle: activeTrack?.title,
         activeChapterIndex,
         openBook,
+        resumeLastBook,
         closeBook,
         play,
         pause,

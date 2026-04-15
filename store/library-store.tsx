@@ -16,7 +16,7 @@ const LibraryContext = createContext<LibraryStore | null>(null);
 
 export function LibraryProvider({ children }: React.PropsWithChildren) {
   const [books, setBooks] = useState<BookRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadBooks = useCallback(async () => {
     setIsLoading(true);

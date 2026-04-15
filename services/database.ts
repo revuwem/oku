@@ -34,9 +34,14 @@ export async function initDatabase(): Promise<void> {
       book_id TEXT PRIMARY KEY,
       chapter_id TEXT NOT NULL,
       position_seconds REAL NOT NULL,
+      last_played_at INTEGER,
       FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
     );
   `);
+  // Migration for existing installs that predate last_played_at
+  try {
+    await database.execAsync("ALTER TABLE positions ADD COLUMN last_played_at INTEGER;");
+  } catch {} // column already exists — safe to ignore
 }
 
 export async function insertBook(book: BookRecord): Promise<void> {
@@ -111,9 +116,12 @@ export async function savePosition(
 ): Promise<void> {
   const database = getDb();
   await database.runAsync(
-    `INSERT INTO positions (book_id, chapter_id, position_seconds)
-     VALUES (?, ?, ?)
-     ON CONFLICT(book_id) DO UPDATE SET chapter_id = excluded.chapter_id, position_seconds = excluded.position_seconds;`,
+    `INSERT INTO positions (book_id, chapter_id, position_seconds, last_played_at)
+     VALUES (?, ?, ?, strftime('%s','now'))
+     ON CONFLICT(book_id) DO UPDATE SET
+       chapter_id = excluded.chapter_id,
+       position_seconds = excluded.position_seconds,
+       last_played_at = excluded.last_played_at;`,
     [bookId, chapterId, positionSeconds]
   );
 }
@@ -130,6 +138,14 @@ export async function loadPosition(
   ]);
   if (!row) return null;
   return { chapterId: row.chapter_id, positionSeconds: row.position_seconds };
+}
+
+export async function getLastPlayedBookId(): Promise<string | null> {
+  const database = getDb();
+  const row = await database.getFirstAsync<{ book_id: string }>(
+    "SELECT book_id FROM positions ORDER BY last_played_at DESC LIMIT 1;"
+  );
+  return row?.book_id ?? null;
 }
 
 export async function getChaptersByBook(bookId: string): Promise<ChapterRecord[]> {

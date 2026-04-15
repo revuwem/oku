@@ -25,10 +25,11 @@ export function Player() {
             {activeTrackTitle ?? ""}
           </Text>
           <Controls />
-          <Box className="w-full items-end px-6">
+          <Box className="w-full items-end px-4">
             <Button
               variant="link"
               action="secondary"
+              size="lg"
               onPress={() => setDrawerOpen(true)}
             >
               <ButtonIcon as={AlignJustify} />

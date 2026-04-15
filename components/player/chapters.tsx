@@ -34,7 +34,7 @@ export function Chapters() {
                     {chapter.title}
                   </Heading>
                   {isActive && (
-                    <Box className="h-1.5 bg-background-300 mt-3 rounded-full overflow-hidden">
+                    <Box className="h-1 bg-background-300 mt-3 rounded-full overflow-hidden">
                       <Box
                         className="h-full bg-primary-500 rounded-full"
                         style={{ width: `${progress * 100}%`, minWidth: 2 }}

@@ -15,6 +15,7 @@ import { setupPlayer } from "@/services/audio-player";
 import { initDatabase } from "@/services/database";
 import { LibraryProvider } from "@/store/library-store";
 import { PlayerProvider } from "@/store/player-store";
+import { TimerProvider } from "@/store/timer-store";
 import { PlaybackService } from "@/service";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -43,12 +44,14 @@ export default function RootLayout() {
     <GluestackUIProvider mode="dark">
       <LibraryProvider>
         <PlayerProvider>
-          <GestureHandlerRootView>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="index" />
-              <Stack.Screen name="import" options={{ presentation: "modal" }} />
-            </Stack>
-          </GestureHandlerRootView>
+          <TimerProvider>
+            <GestureHandlerRootView>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="index" />
+                <Stack.Screen name="import" options={{ presentation: "modal" }} />
+              </Stack>
+            </GestureHandlerRootView>
+          </TimerProvider>
         </PlayerProvider>
       </LibraryProvider>
     </GluestackUIProvider>

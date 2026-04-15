@@ -37,6 +37,11 @@ export async function initDatabase(): Promise<void> {
       last_played_at INTEGER,
       FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
     );
+
+    CREATE TABLE IF NOT EXISTS preferences (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
   `);
   // Migration for existing installs that predate last_played_at
   try {
@@ -146,6 +151,52 @@ export async function getLastPlayedBookId(): Promise<string | null> {
     "SELECT book_id FROM positions ORDER BY last_played_at DESC LIMIT 1;"
   );
   return row?.book_id ?? null;
+}
+
+export async function getSleepTimerDuration(): Promise<number | null> {
+  const database = getDb();
+  const row = await database.getFirstAsync<{ value: string }>(
+    "SELECT value FROM preferences WHERE key = 'sleep_timer_duration';"
+  );
+  if (!row) return null;
+  const parsed = parseInt(row.value, 10);
+  return isNaN(parsed) ? null : parsed;
+}
+
+export async function setSleepTimerDuration(seconds: number | null): Promise<void> {
+  const database = getDb();
+  if (seconds === null) {
+    await database.runAsync("DELETE FROM preferences WHERE key = 'sleep_timer_duration';");
+  } else {
+    await database.runAsync(
+      `INSERT INTO preferences (key, value) VALUES ('sleep_timer_duration', ?)
+       ON CONFLICT(key) DO UPDATE SET value = excluded.value;`,
+      [String(seconds)]
+    );
+  }
+}
+
+export async function getSleepFadeDuration(): Promise<number | null> {
+  const database = getDb();
+  const row = await database.getFirstAsync<{ value: string }>(
+    "SELECT value FROM preferences WHERE key = 'sleep_fade_duration';"
+  );
+  if (!row) return null;
+  const parsed = parseInt(row.value, 10);
+  return isNaN(parsed) ? null : parsed;
+}
+
+export async function setSleepFadeDuration(seconds: number | null): Promise<void> {
+  const database = getDb();
+  if (seconds === null) {
+    await database.runAsync("DELETE FROM preferences WHERE key = 'sleep_fade_duration';");
+  } else {
+    await database.runAsync(
+      `INSERT INTO preferences (key, value) VALUES ('sleep_fade_duration', ?)
+       ON CONFLICT(key) DO UPDATE SET value = excluded.value;`,
+      [String(seconds)]
+    );
+  }
 }
 
 export async function getChaptersByBook(bookId: string): Promise<ChapterRecord[]> {

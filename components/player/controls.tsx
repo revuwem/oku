@@ -9,6 +9,7 @@ import {
 import { Text } from "@/components/ui/text";
 import { usePlayerStore } from "@/store/player-store";
 import { formatTime } from "@/utils/formatTime";
+import * as Haptics from "expo-haptics";
 import { ChevronsLeft, ChevronsRight, Pause, Play } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,6 +20,7 @@ export function Controls() {
   const [dragging, setDragging] = useState(false);
   const [dragValue, setDragValue] = useState(0);
   const seekTarget = useRef<number | null>(null);
+  const lastTickRef = useRef(0);
 
   // Clear seekTarget once the player position has caught up
   useEffect(() => {
@@ -46,11 +48,17 @@ export function Controls() {
           onChange={(val) => {
             setDragging(true);
             setDragValue(val);
+            const tick = Math.floor(val / 30);
+            if (tick !== lastTickRef.current) {
+              lastTickRef.current = tick;
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }
           }}
           onChangeEnd={(val) => {
             seekTarget.current = val;
             setDragging(false);
             seekTo(val);
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           }}
         >
           <SliderTrack>

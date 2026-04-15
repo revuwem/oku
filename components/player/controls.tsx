@@ -10,7 +10,7 @@ import { Text } from "@/components/ui/text";
 import { usePlayerStore } from "@/store/player-store";
 import { formatTime } from "@/utils/formatTime";
 import { ChevronsLeft, ChevronsRight, Pause, Play } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function Controls() {
   const { position, duration, isPlaying, play, pause, seekTo, seekBy } =
@@ -18,8 +18,20 @@ export function Controls() {
 
   const [dragging, setDragging] = useState(false);
   const [dragValue, setDragValue] = useState(0);
+  const seekTarget = useRef<number | null>(null);
 
-  const displayPosition = dragging ? dragValue : position;
+  // Clear seekTarget once the player position has caught up
+  useEffect(() => {
+    if (seekTarget.current !== null && Math.abs(position - seekTarget.current) < 1) {
+      seekTarget.current = null;
+    }
+  }, [position]);
+
+  const displayPosition = dragging
+    ? dragValue
+    : seekTarget.current !== null
+      ? seekTarget.current
+      : position;
   const maxValue = duration > 0 ? duration : 1;
 
   return (
@@ -36,6 +48,7 @@ export function Controls() {
             setDragValue(val);
           }}
           onChangeEnd={(val) => {
+            seekTarget.current = val;
             setDragging(false);
             seekTo(val);
           }}
